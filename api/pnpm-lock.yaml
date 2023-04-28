@@ -1,0 +1,13 @@
+lockfileVersion: '6.0'
+
+dependencies:
+  '@planetscale/database':
+    specifier: ^1.7.0
+    version: 1.7.0
+
+packages:
+
+  /@planetscale/database@1.7.0:
+    resolution: {integrity: sha512-lWR6biXChUyQnxsT4RT1CIeR3ZJvwTQXiQ+158MnY3VjLwjHEGakDzdH9kwUGPk6CHvu6UeqRXp1DgUOVHJFTw==}
+    engines: {node: '>=16'}
+    dev: false
