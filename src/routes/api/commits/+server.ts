@@ -1,17 +1,10 @@
 import { connect } from '@planetscale/database'
+import type { Commit } from '$lib/types'
 
 export const config = {
   runtime: 'edge',
   regions: ["hnd1"]
 }
-
-type Commit = {
-  sha: string,
-  message: string,
-  date: string,
-  module_name: string,
-}
-
 
 const psconfig = {
   host: import.meta.env.VITE_DATABASE_HOST,
@@ -27,7 +20,7 @@ export async function GET({ url }) {
   const before = url.searchParams.get('before')
 
   const sql = `SELECT
-    sha, message, date, name AS module_name
+    sha, message, DATE_FORMAT(date, '%m/%d') AS date_str, name AS module_name
     FROM Commit
     INNER JOIN Module ON Commit.module_id = Module.id
     ${module ? ` WHERE Module.name = ? ` : ``}
@@ -38,8 +31,18 @@ export async function GET({ url }) {
   const parameters = [module, before, limit].filter(p => p !== null)
 
   const { rows } = await conn.execute(sql, parameters)
+  const commits: Commit[] = rows.map(row => ({
+    // @ts-ignore
+    sha: row.sha,
+    // @ts-ignore
+    message: row.message,
+    // @ts-ignore
+    date: row.date_str,
+    // @ts-ignore
+    module: row.module_name,
+  }))
 
-  return new Response(JSON.stringify(rows as Commit[]))
+  return new Response(JSON.stringify(commits))
 }
 
 export async function PUT() {
