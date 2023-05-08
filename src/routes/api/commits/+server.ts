@@ -22,7 +22,8 @@ export async function GET({ url }) {
   const sql = `SELECT
     sha, message, DATE_FORMAT(date, '%m/%d') AS date_str, name AS module_name
     FROM Commit
-    INNER JOIN Module ON Commit.module_id = Module.id
+    INNER JOIN CommitModule ON Commit.id = CommitModule.commit_id
+    INNER JOIN Module ON CommitModule.module_id = Module.id
     ${module ? ` WHERE Module.name = ? ` : ``}
     ${before ? ` AND date < ? ` : ``}
     ORDER BY date DESC LIMIT ?
@@ -46,7 +47,23 @@ export async function GET({ url }) {
 }
 
 export async function PUT() {
-  const { rows } = await conn.execute(`SELECT id, path, (SELECT DATE_FORMAT(date, '%Y-%m-%dT%TZ') FROM Commit WHERE Commit.module_id = Module.id ORDER BY date DESC LIMIT 1) AS latest FROM Module`)
+  const { rows } = await conn.execute(`SELECT
+    id, path,
+    (
+      SELECT
+        DATE_FORMAT(date, '%Y-%m-%dT%TZ')
+      FROM Commit
+      WHERE Commit.id =
+      (
+        SELECT
+          commit_id
+        FROM CommitModule
+        WHERE CommitModule.module_id = Module.id
+        ORDER BY commit_id DESC
+        LIMIT 1
+      )
+    ) AS latest
+    FROM Module`)
 
   const headers = new Headers()
   headers.append('Accept', 'application/vnd.github.v3+json')
@@ -61,6 +78,9 @@ export async function PUT() {
     params.append('sha', 'ue5-main')
     params.append('per_page', '100')
     latest && params.append('since', latest)
+    /** Used for populating the database */
+    // latest && params.append('until', latest)
+    // params.append('since', '2022-10-01T00:00:00Z')
 
     const response = await fetch(`https://api.github.com/repos/Alexs7zzh/UnrealEngine/commits?${params.toString()}`, {
       method: 'GET',
@@ -70,14 +90,13 @@ export async function PUT() {
 
     if (commits.length === 0) return
 
-    await conn.transaction(async tx => {
-      for (const commit of commits) {
-        const { sha, commit: { message, author: { date } } } = commit
-        const dateStr = new Date(date).toISOString().slice(0, 19).replace('T', ' ')
+    for (const commit of commits) {
+      const { sha, commit: { message, author: { date } } } = commit
+      const dateStr = new Date(date).toISOString().slice(0, 19).replace('T', ' ')
 
-        await tx.execute('INSERT IGNORE INTO Commit (sha, message, date, module_id) VALUES (?, ?, ?, ?)', [sha, message, dateStr, id])
-      }
-    })
+      await conn.execute('INSERT IGNORE INTO Commit (sha, message, date) VALUES (?, ?, ?)', [sha, message, dateStr])
+      await conn.execute('INSERT IGNORE INTO CommitModule (commit_id, module_id) VALUES ((SELECT id FROM Commit WHERE sha = ?), ?)', [sha, id])
+    }
   }
 
   return new Response('ok')
