@@ -19,7 +19,16 @@
 </header>
 
 <style>
-  li.active {
-    color: red;
+  li {
+    display: inline-block;
+    margin-right: var(--spacing);
+  }
+
+  li a {
+    color: var(--color-accents-3);
+  }
+
+  li.active a {
+    color: var(--color-accents-1);
   }
 </style>

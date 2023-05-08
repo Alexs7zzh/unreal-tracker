@@ -1,0 +1,165 @@
+:root {
+  --font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --line-height: 1.5;
+  --font-weight: 400;
+  --font-size: 16px;
+  --border-radius: 0.25rem;
+  --border-width: 1px;
+  --outline-width: 3px;
+  --spacing: 1rem;
+  --typography-spacing-vertical: 1.5rem;
+  --block-spacing-vertical: calc(var(--spacing) * 2);
+  --transition: 0.2s ease-in-out;
+}
+
+@media (min-width: 576px) {
+  :root {
+    --font-size: 17px;
+    --block-spacing-vertical: calc(var(--spacing) * 2.5);
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --font-size: 18px;
+    --block-spacing-vertical: calc(var(--spacing) * 3);
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --font-size: 19px;
+    --block-spacing-vertical: calc(var(--spacing) * 3.5);
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --font-size: 20px;
+    --block-spacing-vertical: calc(var(--spacing) * 4);
+  }
+}
+
+:root {
+  --color-foreground: #000;
+  --color-background: #fff;
+  
+  --color-accents-1: #111;
+  --color-accents-2: #333;
+  --color-accents-3: #444;
+  --color-accents-4: #666;
+  --color-accents-5: #888;
+  --color-accents-6: #999;
+  --color-accents-7: #eaeaea;
+  --color-accents-8: #fafafa;
+
+  color-scheme: light;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #000;
+    --color-foreground: #fff;
+  
+    --color-accents-8: #111;
+    --color-accents-7: #333;
+    --color-accents-6: #444;
+    --color-accents-5: #666;
+    --color-accents-4: #888;
+    --color-accents-3: #999;
+    --color-accents-2: #eaeaea;
+    --color-accents-1: #fafafa;
+
+    color-scheme: dark;
+  }
+}
+
+*::before,
+*::after {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+}
+
+::before,
+::after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+:where(:root) {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  font-family: var(--font-family);
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+  cursor: default;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+}
+
+main {
+  display: block;
+}
+
+a,
+[role=link] {
+  outline: none;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: background-color var(--transition), color var(--transition), box-shadow var(--transition), -webkit-text-decoration var(--transition);
+  transition: background-color var(--transition), color var(--transition), text-decoration var(--transition), box-shadow var(--transition);
+  transition: background-color var(--transition), color var(--transition), text-decoration var(--transition), box-shadow var(--transition), -webkit-text-decoration var(--transition);
+}
+
+a:is([aria-current], :hover, :active, :focus),
+[role=link]:is([aria-current], :hover, :active, :focus) {
+  text-decoration: underline;
+  color: var(--color-accents-6);
+}
+
+a:focus,
+[role=link]:focus {
+  background-color: var(--color-accents-3);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: var(--typography-spacing-vertical);
+  color: var(--color-foreground);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+}
+
+p {
+  margin-bottom: var(--typography-spacing-vertical);
+}
+
+:where(dl, ol, ul) {
+  padding: 0;
+  list-style: none;
+}
+
+/* ::-moz-selection {
+  background-color: var(--primary-focus);
+}
+
+::selection {
+  background-color: var(--primary-focus);
+} */
