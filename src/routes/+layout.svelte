@@ -20,8 +20,8 @@
   hr {
     margin-top: var(--block-spacing-vertical);
     margin-bottom: var(--block-spacing-vertical);
-    background-color: var(--color-accents-5);
+    background-color: var(--color-accents-6);
     border: none;
-    height: 2px;
+    height: 1px;
   }
 </style>

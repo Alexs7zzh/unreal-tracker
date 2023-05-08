@@ -4,18 +4,38 @@
 </script>
 
 <section>
-  <div>
-    <h3>{commit.modules}</h3>
-    <time>{commit.date}</time>
+  <div class="section-header">
+    <div class="module">
+      {#each commit.modules.split(',') as module }
+        <span>{module}</span>
+      {/each}
+    </div>
+    <a href={`https://github.com/EpicGames/UnrealEngine/commit/${commit.sha}`}>
+      {commit.sha.slice(0, 7)}
+    </a>
   </div>
+
   <p>{@html commit.message}</p>
-  <a href={`https://github.com/EpicGames/UnrealEngine/commit/${commit.sha}`}>
-    {commit.sha.slice(0, 7)}
-  </a>
 </section>
 
 <style>
   p {
     white-space: pre-wrap;
   }
+
+  section {
+    margin-top: var(--block-spacing-vertical);
+    margin-bottom: var(--block-spacing-vertical);
+  }
+
+  .section-header {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: space-between;
+    color: var(--color-accents-5);
+  }
+
+  /* .module, a {
+    color: var(--color-accents-5);
+  } */
 </style>

@@ -8,6 +8,15 @@
 <main>
   {#each data.commits as commit}
     <Commit {commit} />
+    <hr />
   {/each}
 </main>
 
+<style>
+  hr {
+    background-color: var(--color-accents-6);
+    border: none;
+    height: 1px;
+    width: 60%;
+  }
+</style>

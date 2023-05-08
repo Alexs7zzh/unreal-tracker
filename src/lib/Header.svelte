@@ -25,7 +25,7 @@
   }
 
   li a {
-    color: var(--color-accents-3);
+    color: var(--color-accents-4);
   }
 
   li.active a {
