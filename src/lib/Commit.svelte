@@ -11,7 +11,7 @@
       {/each}
     </div>
     <a href={`https://github.com/EpicGames/UnrealEngine/commit/${commit.sha}`}>
-      {commit.sha.slice(0, 7)}
+      {`${commit.date} · ${commit.sha.slice(0, 7)}`}
     </a>
   </div>
 
