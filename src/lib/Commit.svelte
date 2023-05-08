@@ -5,7 +5,7 @@
 
 <section>
   <div>
-    <h3>{commit.module}</h3>
+    <h3>{commit.modules}</h3>
     <time>{commit.date}</time>
   </div>
   <p>{@html commit.message}</p>

@@ -19,15 +19,37 @@ export async function GET({ url }) {
   const module = url.searchParams.get('module')
   const before = url.searchParams.get('before')
 
-  const sql = `SELECT
-    sha, message, DATE_FORMAT(date, '%m/%d') AS date_str, name AS module_name
-    FROM Commit
-    INNER JOIN CommitModule ON Commit.id = CommitModule.commit_id
-    INNER JOIN Module ON CommitModule.module_id = Module.id
-    ${module ? ` WHERE Module.name = ? ` : ``}
-    ${before ? ` AND date < ? ` : ``}
-    ORDER BY date DESC LIMIT ?
-  `
+  let sql
+  if (module) {
+    sql = `
+      SELECT
+        sha, message,
+        DATE_FORMAT(date, '%m/%d') AS date_str,
+        name as modules
+      FROM Module
+      INNER JOIN CommitModule ON CommitModule.module_id = Module.id
+      INNER JOIN Commit ON Commit.id = CommitModule.commit_id
+      WHERE name = ?
+      ${before ? `WHERE date < ? ` : ``}
+      ORDER BY date DESC LIMIT ?
+    `
+  } else {
+    sql = `
+      SELECT
+        sha, message,
+        DATE_FORMAT(date, '%m/%d') AS date_str,
+        (
+          SELECT
+            GROUP_CONCAT(name)
+          FROM Module
+          INNER JOIN CommitModule ON CommitModule.module_id = Module.id
+          WHERE CommitModule.commit_id = Commit.id
+        ) AS modules
+      FROM Commit
+      ${before ? `WHERE date < ? ` : ``}
+      ORDER BY date DESC LIMIT ?
+    `
+  }
 
   const parameters = [module, before, limit].filter(p => p !== null)
 
@@ -40,30 +62,32 @@ export async function GET({ url }) {
     // @ts-ignore
     date: row.date_str,
     // @ts-ignore
-    module: row.module_name,
+    modules: row.modules,
   }))
 
   return new Response(JSON.stringify(commits))
 }
 
 export async function PUT() {
-  const { rows } = await conn.execute(`SELECT
-    id, path,
-    (
-      SELECT
-        DATE_FORMAT(date, '%Y-%m-%dT%TZ')
-      FROM Commit
-      WHERE Commit.id =
+  const { rows } = await conn.execute(`
+    SELECT
+      id, path,
       (
         SELECT
-          commit_id
-        FROM CommitModule
-        WHERE CommitModule.module_id = Module.id
-        ORDER BY commit_id DESC
-        LIMIT 1
-      )
-    ) AS latest
-    FROM Module`)
+          DATE_FORMAT(date, '%Y-%m-%dT%TZ')
+        FROM Commit
+        WHERE Commit.id =
+        (
+          SELECT
+            commit_id
+          FROM CommitModule
+          WHERE CommitModule.module_id = Module.id
+          ORDER BY commit_id DESC
+          LIMIT 1
+        )
+      ) AS latest
+      FROM Module
+    `)
 
   const headers = new Headers()
   headers.append('Accept', 'application/vnd.github.v3+json')
