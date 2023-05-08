@@ -5,8 +5,12 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		output: {
+			preloadStrategy: 'preload-mjs'
+		}
 	}
+	
 };
 
 export default config
