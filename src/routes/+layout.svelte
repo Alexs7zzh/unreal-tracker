@@ -6,10 +6,6 @@
   export let data: LayoutData
 </script>
 
-<svelte:head>
-	<title>Unreal Tracker</title>
-</svelte:head>
-
 <Header modules={data.modules} />
 <hr />
 <slot></slot>

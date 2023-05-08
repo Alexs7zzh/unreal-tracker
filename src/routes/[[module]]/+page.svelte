@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { PageData } from './$types'
   import Commit from '$lib/Commit.svelte'
+  import { page } from '$app/stores'
 
   export let data: PageData
 </script>
+
+<svelte:head>
+	<title>{$page.params.module ? `${$page.params.module} | ` : ''}Unreal Tracker</title>
+</svelte:head>
 
 <main>
   {#each data.commits as commit}
