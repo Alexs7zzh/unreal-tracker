@@ -43,27 +43,25 @@
 }
 
 :root {
-  --color-foreground: #000;
   --color-background: #fff;
+  --color-foreground: #111;
   
-  --color-accents-1: #111;
-  --color-accents-2: #333;
-  --color-accents-3: #444;
-  --color-accents-4: #666;
-  --color-accents-5: #888;
-  --color-accents-6: #999;
-  --color-accents-7: #eaeaea;
-  --color-accents-8: #fafafa;
+  --color-accents-1: #333;
+  --color-accents-2: #444;
+  --color-accents-3: #666;
+  --color-accents-4: #888;
+  --color-accents-5: #999;
+  --color-accents-6: #eaeaea;
+  --color-accents-7: #fafafa;
 
   color-scheme: light;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
   :root {
-    --color-background: #000;
+    --color-background: #111;
     --color-foreground: #fff;
   
-    --color-accents-8: #111;
     --color-accents-7: #333;
     --color-accents-6: #444;
     --color-accents-5: #666;
