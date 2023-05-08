@@ -10,7 +10,7 @@ export const load: PageLoad = async event => {
     url += `?${searchParams.toString()}`
   }
 
-  const commits = await(await fetch(url)).json() as Commit[]
-
-  return { commits }
+  return {
+    commits: await (await fetch(url)).json() as Commit[]
+  }
 }

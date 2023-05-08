@@ -6,10 +6,12 @@
 </script>
 
 <main>
-  {#each data.commits as commit}
-    <Commit {commit} />
-    <hr />
-  {/each}
+  {#await data.commits then commits}
+    {#each commits as commit}
+      <Commit {commit} />
+      <hr />
+    {/each}
+  {/await}
 </main>
 
 <style>
