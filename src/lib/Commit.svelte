@@ -35,7 +35,7 @@
     color: var(--color-accents-5);
   }
 
-  /* .module, a {
-    color: var(--color-accents-5);
-  } */
+  .module {
+    user-select: none;
+  }
 </style>

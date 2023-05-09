@@ -19,6 +19,10 @@
 </header>
 
 <style>
+  header {
+    user-select: none;
+  }
+
   li {
     display: inline-block;
     margin-right: var(--spacing);

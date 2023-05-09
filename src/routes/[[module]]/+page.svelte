@@ -8,6 +8,7 @@
 
 <svelte:head>
 	<title>{$page.params.module ? `${$page.params.module} | ` : ''}Unreal Tracker</title>
+  <meta name="description" content="Track commits of Unreal Engine repo" />
 </svelte:head>
 
 <main>
